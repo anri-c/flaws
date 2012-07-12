@@ -1,0 +1,71 @@
+@charset "UTF-8";
+/*------------------------------------*\
+	CONTENTS
+\*------------------------------------*/
+/*
+MAIN
+HEADER
+TYPE
+*/
+/*------------------------------------*\
+	$MAIN
+\*------------------------------------*/
+html{
+	background:url(/static/img/page-top.gif) left top repeat-x #fff;
+	padding-top:10px; /* Move the content down over the page-top background-image. */
+	font-family: "ヒラギノ角ゴ Pro W3", "メイリオ", "ＭＳ Ｐゴシック", sans-serif;
+}
+/*------------------------------------*\
+	$HEADER
+\*------------------------------------*/
+.header{
+	padding:1.5em 0;
+}
+.logo{
+	background:url(../img/logo.jpg);
+}
+.logo,.logo img{
+	width:280px;
+	height:130px;
+}
+/*------------------------------------*\
+	$FOOTER
+\*------------------------------------*/
+.footer{
+	padding-top:1.5em;
+	border-top:1px solid #ccc;
+	color:#999;
+}
+/*------------------------------------*\
+	$TYPE
+\*------------------------------------*/
+a{
+	color:#4a8ec2;
+}
+mark{
+	border-bottom:2px solid;
+}
+pre{
+	padding:10px;
+}
+pre code,
+pre mark{
+	background:none;
+}
+/*------------------------------------*\
+	$MISC
+\*------------------------------------*/
+table th{
+	font-size:0.85em;
+}
+table td{
+	font-size:0.8em;
+}
+::selection		{ background-color:#4a8ec2; color:#fff; }
+::-moz-selection{ background-color:#4a8ec2; color:#fff; }
+hr{
+	padding:0;
+	border:none;
+	height:1px;
+	background-color:#ccc;
+}

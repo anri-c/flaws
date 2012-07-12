@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang=ja>
+<head>
+	<meta charset=UTF-8>
+	<meta name=viewport content="width=device-width, minimum-scale=1.0, maximum-scale=1.0">
+	<meta name=description content="anoter and yet another aws dashbord">
+  <title>{% block title %}{% endblock %} - HostMan</title>
+  <link rel=stylesheet href={{ url_for('static', filename='inuit.css') }}>
+  <link rel=stylesheet href={{ url_for('static', filename='igloos.css') }}>
+  <link rel=stylesheet href={{ url_for('static', filename='style.css') }}>
+  <link rel=author href={{ url_for('static', filename='humans.txt') }}>
+  <link rel="shortcut icon" href={{ url_for('static', filename='icon.png') }}>
+  <link rel=apple-touch-icon-precomposed href={{ url_for('static', filename='icon.png') }} />
+</head>
+<body class=wrapper>
+	<div class=header>
+    <h1>flaws</h1>
+    <ol class="nav breadcrumb" style="margin-left:0;">
+      <li><a href="/">Main</a></li>
+      <li><a href="/ec2">EC2</a></li>
+      <li><a href="/r53">Route53</a></li>
+    </ol>
+	</div>
+	<div class=grids>
+      {% block content %}{% endblock %}
+	</div><!-- /grids -->
+  <div class=grids>
+    <div class=grid-12>
+	  <div class=footer>
+      <p>using <a href="https://github.com/boto/boto">boto</a>,<a href="http://flask.pocoo.org/">flask</a>&<a href="http://csswizardry.com/inuitcss/">inuit</a></p>
+    </div>
+    </div><!-- /grid-12 -->
+  </div><!-- /grids -->
+</body>
+</html>

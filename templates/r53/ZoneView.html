@@ -1,0 +1,25 @@
+{% extends "layout.html" %}
+
+{% block title %}ゾーン詳細: {{ zone_id }}{% endblock %}
+
+{% block content %}
+<div class=grids>
+  <div class=grid-12>
+    <h2>ゾーン詳細: {{ zone_id }}</h2>
+      <table>
+        <tr>
+          <th>レコード名</th>
+          <th>タイプ</th>
+          <th>データ</th>
+        </tr>
+      {% for r in rr %}
+        <tr>
+          <td>{{ r['name'] }}</td>
+          <td>{{ r['type'] }}</td>
+          <td>{{ r['content'] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+  </div>
+</div>
+  {% endblock %}

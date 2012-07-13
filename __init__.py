@@ -1,34 +1,68 @@
 from flask import Flask, render_template
 import boto
-
 app = Flask(__name__)
 
-iam = boto.connect_iam()
+
 @app.route("/")
 def index():
-    return "Hello World!!"
+    return render_template('index.html')
 
 @app.route("/ec2/")
 @app.route("/ec2/<region>")
-def ec2(region=None):
+def ec2Region(region=None):
+    import boto.ec2
+    if region == None:
+        ''' http://example.com/ec2/ or http://example.com/ec2/region/ '''
+        con = boto.ec2.regions()
+        region_list = [{
+            'name': region.name,
+            'endpoint':region.endpoint
+            }for region in boto.ec2.regions()]
 
-    il = [{'id':1, 'name':'i-ed6932ed'}, {'id':2,'name': 'i-ed6932ef' }]    
-#    if region not None:
-#        con = boto.connect_ec2(region=region)
-#        instance_list = [{
-#            'id': i.id,
-#            'type': i.instance_type,
-#            '':i.public_dns_name } for i in r.instances for r in con.get_all_instances()]
+        return render_template('ec2/index.html', region_list=region_list)
+
+    else:
+        ''' http://example.com/ec2/<region> '''
+        con = boto.ec2.connect_to_region(region)
+        r = con.get_all_instances()
+        see(r)
+
+        instance_list = [{
+            'id': instance.id,
+            'type': instance.instance_type,
+            'name': instance.public_dns_name,
+            'name': instance.private_dns_name,
+            'vpc': instance.vpc_id,
+            } for instance in i.instances for i in r ]
+
+        return render_template('ec2/region.html', region=region, instance_list=instance_list)
 
 
-    return render_template('ec2.html', region=region,il=il)
+@app.route("/vpc/")
+@app.route("/vpc/region/<region>")
+def VirtualPrivateCloud(region=None):
+    con = boto.connect_vpc()
+    vpc_list = [{
+        'id': vpc.id,
+        'cidr': vpc.cidr_block,
+        'state': vpc.state,
+        'dhcp': vpc.dhcp_options_id
+        } for vpc in con.get_all_vpcs()]
+
+
+    return 
+
+
+'''  No Region Start '''
 
 @app.route("/r53/")
 @app.route("/r53/<zone_id>")
-def route53(zone_id=None):
-    r53 = boto.connect_route53()
+def Route53(zone_id=None):
+    con = boto.connect_route53()
     if zone_id != None:
-        rl = r53.get_all_rrsets(zone_id)
+        ''' http://example.com/r53/<zone_id>
+        get all rrset specified zone id '''
+        rl = con.get_all_rrsets(zone_id)
         rr = [{
             'type': r.type,
             'name': r.name,
@@ -36,24 +70,27 @@ def route53(zone_id=None):
             'content': r.to_print()
             } for r in rl]
 
-        return render_template('r53.html', zone_id=zone_id,rr=rr)
+        return render_template('r53/ZoneView.html', zone_id=zone_id,rr=rr)
 
     else:
-        hl = r53.get_all_hosted_zones()
+        ''' http://example.com/r53/ 
+        get all hosted zone '''
+        hl = con.get_all_hosted_zones()
         hzl = [{
             'id': hz['Id'].split("/")[-1],
             'name': hz['Name'],
             'count': hz['ResourceRecordSetCount']
             } for hz in hl['ListHostedZonesResponse']['HostedZones']]
 
-        return render_template('r53.html', hzl=hzl)
+        return render_template('r53/ZoneIndex.html', hzl=hzl)
 
 @app.route("/iam/group/")
 @app.route("/iam/group/<group_name>")
 def IamGroup(group_name=None):
+    con = boto.connect_iam()
     if group_name == None:
         ''' http://example.com/iam/group '''
-        gr = iam.get_all_groups()
+        gr = con.get_all_groups()
         gl = [{
             'id': g.group_id,
             'name': g.group_name,
@@ -61,15 +98,17 @@ def IamGroup(group_name=None):
             'created': g.create_date
             } for g in gr['list_groups_response']['list_groups_result']['groups']]
 
-        return render_template('iamGroup.html', gl=gl)
+        return render_template('iam/GroupView.html', gl=gl)
+
     elif group_name != None:
         ''' http://example.com/iam/group/<group_name> '''
-        gr = iam.get_group(group_name)
+        gr = con.get_group(group_name)
         group = gr['get_group_response']['get_group_result']['group']
         gd = {'id':group.group_id,
                 'name':group.group_name,
                 'created':group.create_date,
                 'arn':group.arn}
+
         ul = gr['get_group_response']['get_group_result']['users']
         users = [{
             'id':u.user_id,
@@ -78,22 +117,51 @@ def IamGroup(group_name=None):
             'created':u.create_date
             } for u in ul]
 
-        return render_template('iamGroup.html', gd=gd, users=users)
+        return render_template('iam/GroupIndex.html', gd=gd,users=users)
 
 @app.route('/iam/user/')
 @app.route("/iam/user/<user_name>")
 def IamUser(user_name=None):
+    con = boto.connect_iam()
 
     if user_name == None:
-        ''' http://example.com/iam/user '''
-        ul = iam.get_all_users()
+        ''' http://example.com/iam/user 
+        get all IAM user '''
+        ul = con.get_all_users()
+        users = ul['list_users_response']['list_users_result']['users']
+        user_list = [{
+                'id': user.user_id,
+                'name': user.user_name,
+                'arn': user.arn,
+                'created': user.create_date
+                } for user in users ]
 
-        return render_template('iamUser.html')
+        return render_template('iam/UserIndex.html', user_list=user_list)
+
     elif user_name != None:
         ''' http://example.com/iam/user/<user_name> '''
-        ud = iam.get_user(user_name)
 
-        return render_template('iamUser.html')
+        ''' get specified user detail '''
+        ud = con.get_user(user_name)
+        user = ud['get_user_response']['get_user_result']['user']
+
+        ''' get all groups for specified user '''
+        ug = con.get_groups_for_user(user_name)
+        groups = ug['list_groups_for_user_response']['list_groups_for_user_result']['groups']
+        group_list = [{
+            'id': g.group_id,
+            'name': g.group_name,
+            'created': g.create_date
+            } for g in groups ]
+
+        ''' get all policies for specified user '''
+        up = con.get_all_user_policies(user_name)
+        policies = up['list_user_policies_response']['list_user_policies_result']
+
+        return render_template('iam/UserView.html',
+                user=user,group_list=group_list,policies=policies)
+
+''' No Region End '''
 
 if __name__ == "__main__":
     app.run(debug=True,host="0.0.0.0",port=8834)

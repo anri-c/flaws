@@ -1,0 +1,25 @@
+{% extends "layout.html" %}
+
+{% block title %}ホステッドゾーン一覧{% endblock %}
+
+{% block content %}
+<div class=grids>
+  <div class=grid-12>
+    <h2>ホステッドゾーン一覧</h2>
+      <table>
+        <tr>
+          <th>ゾーン ID</th>
+          <th>ゾーン名</th>
+          <th>レコード数</th>
+        </tr>
+      {% for z in hzl %}
+        <tr>
+          <td><a href=/r53/{{ z['id']}}>{{ z['id'] }}</a></td>
+          <td>{{ z['name'] }}</td>
+          <td>{{ z['count'] }}</td>
+        </tr>
+      {% endfor %}
+    </table>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,23 @@
+{% extends "layout.html" %}
+
+{% if region %}
+  {% block title %}{{ region }}{% endblock %}
+{% endif %}
+
+{% block content %}
+<div class=grid-12>
+  <h2>リージョン一覧</h2>
+  <table>
+    <tr>
+      <th>リージョン名</th>
+      <th>エンドポイント</th>
+    </tr>
+    {% for region in region_list %}
+    <tr>
+      <td><a href=/ec2/{{ region.name }}>{{ region.name }}</a></td>
+      <td>{{ region.endpoint }}</td>
+    </td>
+    {% endfor %}
+  </table>
+</div>
+  {% endblock %}

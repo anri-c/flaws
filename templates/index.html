@@ -1,0 +1,22 @@
+{% extends "layout.html" %}
+
+{% if region %}
+  {% block title %}flaws - another and yet another aws dashborad.{% endblock %}
+{% endif %}
+
+{% block content %}
+<div class=grid-12>
+  <h2>メニュー</h2>
+  <dl>
+    <dt>Compute</dt>
+    <dd><a href=/ec2>Elastic Compute(EC2)</a></dd>
+    <dd>Elastic MapReduce(EMR)</dd>
+    <dd>Auto Scaling</dd>
+    <dt>Networking</dt>
+    <dd><a href=/r53>Route 53</a></dd>
+    <dd><a href=/vpc>Virtual Private Cloud(VPC)</a></dd>
+    <dd>Elastic Load Balancing(ELB)</dd>
+    <dt><a href=/iam>Identity & Access Management(IAM)</a></dt>
+  </dl>
+</div>
+  {% endblock %}

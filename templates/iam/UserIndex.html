@@ -1,0 +1,27 @@
+{% extends "layout.html" %}
+
+{% block title %}IAM ユーザ一覧{% endblock %}
+
+{% block content %}
+<div class=grids>
+<div class=grid-12>
+  <h2>IAM ユーザ一覧</h2>
+      <table>
+        <tr>
+          <th>ユーザ ID</th>
+          <th>ユーザ名</th>
+          <th>リソース名</th>
+          <th>作成日時</th>
+        </tr>
+        {% for user in user_list %}
+        <tr>
+          <td><a href=/iam/user/{{ user['name']}}>{{ user['id']}}</a></td>
+          <td>{{ user['name'] }}</td>
+          <td>{{ user['arn'] }}</td>
+          <td>{{ user['created'] }}</td>
+        </tr>
+        {% endfor %}
+      </table>
+</div>
+</div>
+{% endblock %}

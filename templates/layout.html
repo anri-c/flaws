@@ -4,7 +4,7 @@
 	<meta charset=UTF-8>
 	<meta name=viewport content="width=device-width, minimum-scale=1.0, maximum-scale=1.0">
 	<meta name=description content="anoter and yet another aws dashbord">
-  <title>{% block title %}{% endblock %} - HostMan</title>
+  <title>{% block title %}{% endblock %} flaws </title>
   <link rel=stylesheet href={{ url_for('static', filename='inuit.css') }}>
   <link rel=stylesheet href={{ url_for('static', filename='igloos.css') }}>
   <link rel=stylesheet href={{ url_for('static', filename='style.css') }}>
@@ -19,11 +19,10 @@
       <li><a href="/">Main</a></li>
       <li><a href="/ec2">EC2</a></li>
       <li><a href="/r53">Route53</a></li>
+      <li><a href="/iam/user">IAM</a></li>
     </ol>
 	</div>
-	<div class=grids>
       {% block content %}{% endblock %}
-	</div><!-- /grids -->
   <div class=grids>
     <div class=grid-12>
 	  <div class=footer>

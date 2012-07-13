@@ -1,0 +1,46 @@
+{% extends "layout.html" %}
+
+{% block title %}IAM ユーザ:{% endblock %}
+
+{% block content %}
+<div class=grids>
+<div class=grid-6>
+  <h3>ユーザ基本情報</h3>
+  <dl>
+    <dt>ユーザ ID</dt>
+    <dd>{{ user['user_id'] }}
+    <dt>ユーザ名</dt>
+    <dd>{{ user['user_name'] }}</dd>
+    <dt>リソース名</dt>
+    <dd>{{ user['arn'] }}</dd>
+    <dt>作成日時</dt>
+    <dd>{{ user['create_date'] }}</dd>
+  </dl>
+</div>
+<div class=grid-6>
+  <h3>アタッチされているポリシー</h3>
+  <ul>
+  {% for policy in policies['policy_names'] %}
+    <li>{{ policy }}</li>
+  {% endfor %}
+  </ul>
+</div>
+<div class=grid-12>
+  <h3>所属グループ一覧</h3>
+  <table>
+    <tr>
+      <th>グループ ID</th>
+      <th>グループ名</th>
+      <th>作成日時</th>
+    </tr>
+    {% for group in group_list %}
+    <tr>
+      <td>{{ group['id'] }}</td>
+      <td>{{ group['name'] }}</td>
+      <td>{{ group['created'] }}</td>
+    </tr>
+  {% endfor %}
+  </table>
+</div>
+</div>
+{% endblock %}

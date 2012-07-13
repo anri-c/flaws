@@ -1,0 +1,41 @@
+{% extends "layout.html" %}
+
+{% if zone_id %}
+  {% block title %}{{ zone_id }}{% endblock %}
+{% endif %}
+
+{% block content %}
+<div class=grid-12>
+      <table>
+      {% if zone_id %}
+      <caption>ゾーンID : {{ zone_id }}</caption>
+        <tr>
+          <th>レコード名</th>
+          <th>タイプ</th>
+          <th>データ</th>
+        </tr>
+      {% for r in rr %}
+        <tr>
+          <td>{{ r['name'] }}</td>
+          <td>{{ r['type'] }}</td>
+          <td>{{ r['content'] }}</td>
+        </tr>
+        {% endfor %}
+      {% else %}
+      <caption>ホステッドゾーンリスト</caption>
+        <tr>
+          <th>ゾーン ID</th>
+          <th>ゾーン名</th>
+          <th>レコード数</th>
+        </tr>
+      {% for z in hzl %}
+        <tr>
+          <td><a href=/r53/{{ z['id']}}>{{ z['id'] }}</a></td>
+          <td>{{ z['name'] }}</td>
+          <td>{{ z['count'] }}</td>
+        </tr>
+      {% endfor %}
+      {% endif %}
+    </table>
+</div>
+  {% endblock %}

@@ -1,0 +1,12 @@
+{% extends "layout.html" %}
+
+{% if region %}
+  {% block title %}{{ region }}{% endblock %}
+{% endif %}
+
+{% block content %}
+<div class=grid-12>
+  <h2>インスタンス一覧 {{ region }}</h2>
+  {{ instance_list }}
+</div>
+{% endblock %}

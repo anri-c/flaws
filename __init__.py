@@ -7,37 +7,78 @@ app = Flask(__name__)
 def index():
     return render_template('index.html')
 
-@app.route("/ec2/")
-@app.route("/ec2/<region>")
+@app.route("/ec2/region/")
+@app.route("/ec2/region/<region>")
 def ec2Region(region=None):
     import boto.ec2
     if region == None:
-        ''' http://example.com/ec2/ or http://example.com/ec2/region/ '''
+        ''' http://example.com/ec2/region/ '''
         con = boto.ec2.regions()
         region_list = [{
             'name': region.name,
             'endpoint':region.endpoint
-            }for region in boto.ec2.regions()]
+            } for region in boto.ec2.regions()]
 
-        return render_template('ec2/index.html', region_list=region_list)
+        return render_template('ec2/RegionIndex.html',
+                region_list=region_list)
 
     else:
-        ''' http://example.com/ec2/<region> '''
+        ''' http://example.com/ec2/region/<region> '''
         con = boto.ec2.connect_to_region(region)
-        r = con.get_all_instances()
-        see(r)
+        instance_list = []
+        for r in con.get_all_instances():
+            for i in r.instances:
+                instance_list.append({
+                    'id':i.id,
+                    'type':i.instance_type,
+                    'pub_name': i.public_dns_name,
+                    'pri_name': i.private_dns_name,
+                    'vpc': i.vpc_id
+                    })
 
+        return render_template('ec2/RegionView.html',
+                region=region, il=instance_list)
+
+@app.route("/ec2/instance/")
+@app.route("/ec2/instance/<instance_id>")
+def ec2Instance(instance_id=None):
+    import boto.ec2
+    if instance_id == None:
+        pass
+    '''  '''
+
+
+@app.route("/rds/region/")
+@app.route("/rds/region/<region>")
+def rdsRegion(region=None):
+    import boto.rds
+    if region == None:
+        con = boto.rds.regions()
+        region_list =[{
+            'name': region.name,
+            'endpoint':region.endpoint
+            } for region in boto.rds.regions()]
+
+        return render_template('rds/RegionIndex.html',
+                region_list=region_list)
+
+    else:
+        con = boto.rds.connect_to_region(region)
         instance_list = [{
-            'id': instance.id,
-            'type': instance.instance_type,
-            'name': instance.public_dns_name,
-            'name': instance.private_dns_name,
-            'vpc': instance.vpc_id,
-            } for instance in i.instances for i in r ]
+            'id':r.id,
+            'type':r.instance_class,
+            'engine':r.engine,
+            'db':r.DBName
+            }for r in con.get_all_dbinstances()]
 
-        return render_template('ec2/region.html', region=region, instance_list=instance_list)
+        return render_template('rds/RegionView.html',
+                region=region, instance_list=instance_list)
 
 
+
+
+
+''' VPC '''
 @app.route("/vpc/")
 @app.route("/vpc/region/<region>")
 def VirtualPrivateCloud(region=None):
@@ -55,6 +96,7 @@ def VirtualPrivateCloud(region=None):
 
 '''  No Region Start '''
 
+''' Route 53 '''
 @app.route("/r53/")
 @app.route("/r53/<zone_id>")
 def Route53(zone_id=None):
@@ -84,6 +126,7 @@ def Route53(zone_id=None):
 
         return render_template('r53/ZoneIndex.html', hzl=hzl)
 
+''' IAM '''
 @app.route("/iam/group/")
 @app.route("/iam/group/<group_name>")
 def IamGroup(group_name=None):

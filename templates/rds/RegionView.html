@@ -9,22 +9,16 @@
   <table>
     <tr>
       <th>インスタンス ID</th>
-      <th>プライベート DNS 名</th>
-      <th rowspan=1>VPC ID</th>
-    </tr>
-    <tr>
+      <th>データベース名</th>
+      <th>データベースエンジン</th>
       <th>インスタンスタイプ</th>
-      <th>パブリック DNS 名</th>
     </tr>
-    {% for i in il %}
+    {% for i in instance_list %}
     <tr>
       <td>{{ i.id }}</td>
-      <td>{{ i.pub_name }}</td>
-      <td rowspan=1>{{ i.vpc }}</td>
-    </tr>
-    <tr>
+      <td>{{ i.db }}</td>
+      <td>{{ i.engine }}</td>
       <td>{{ i.type }}</td>
-      <td>{{ i.pri_name }}</td>
     </tr>
     {% endfor %}
     </table>

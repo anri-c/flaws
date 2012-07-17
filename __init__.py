@@ -148,7 +148,8 @@ def Route53(zone_id=None):
             'content': r.to_print()
             } for r in rl]
 
-        return render_template('r53/ZoneView.html', zone_id=zone_id,rr=rr)
+        return render_template('r53/ZoneView.html',
+                zone_id=zone_id, rr=rr)
 
     else:
         ''' http://localhost/r53/ 

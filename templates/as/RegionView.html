@@ -1,0 +1,33 @@
+{% extends "layout.html" %}
+
+{% block title %}インスタンス一覧: {{ region }}{% endblock %}
+
+{% block content %}
+<div class=grids>
+<div class=grid-12>
+  <h2>インスタンス一覧 {{ region }}</h2>
+  <table>
+    <tr>
+      <th>インスタンス ID</th>
+      <th>プライベート DNS 名</th>
+      <th rowspan=1>VPC ID</th>
+    </tr>
+    <tr>
+      <th>インスタンスタイプ</th>
+      <th>パブリック DNS 名</th>
+    </tr>
+    {% for i in il %}
+    <tr>
+      <td>{{ i.id }}</td>
+      <td>{{ i.pub_name }}</td>
+      <td rowspan=1>{{ i.vpc }}</td>
+    </tr>
+    <tr>
+      <td>{{ i.type }}</td>
+      <td>{{ i.pri_name }}</td>
+    </tr>
+    {% endfor %}
+    </table>
+</div>
+</div>
+{% endblock %}

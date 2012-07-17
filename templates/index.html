@@ -1,22 +1,24 @@
 {% extends "layout.html" %}
 
-{% if region %}
-  {% block title %}flaws - another and yet another aws dashborad.{% endblock %}
-{% endif %}
+{% block title %}flaws - another and yet another aws dashborad.{% endblock %}
 
 {% block content %}
 <div class=grid-12>
   <h2>メニュー</h2>
   <dl>
     <dt>Compute</dt>
-    <dd><a href=/ec2>Elastic Compute(EC2)</a></dd>
-    <dd>Elastic MapReduce(EMR)</dd>
-    <dd>Auto Scaling</dd>
-    <dt>Networking</dt>
-    <dd><a href=/r53>Route 53</a></dd>
-    <dd><a href=/vpc>Virtual Private Cloud(VPC)</a></dd>
+    <dd><a href=/ec2/region/>Elastic Compute(EC2)</a></dd>
+    <dd><a href=/ec2/autoscale/>Auto Scalingi</a></dd>
     <dd>Elastic Load Balancing(ELB)</dd>
-    <dt><a href=/iam>Identity & Access Management(IAM)</a></dt>
+    <dd>Elastic MapReduce(EMR)</dd>
+    <dt>Dtabase</dt>
+    <dd><a href=/rds/region/>Relational Database Service(RDS)</a></dd>
+    <dd>SimpleDB(SDB)</dd>
+    <dd>DynamoDB</dd>
+    <dt>Networking</dt>
+    <dd><a href=/r53/>Route 53</a></dd>
+    <dd><a href=/vpc/>Virtual Private Cloud(VPC)</a></dd>
+    <dt><a href=/iam/>Identity & Access Management(IAM)</a></dt>
   </dl>
 </div>
-  {% endblock %}
+{% endblock %}

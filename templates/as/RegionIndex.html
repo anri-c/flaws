@@ -1,0 +1,23 @@
+{% extends "layout.html" %}
+
+{% block title %}Autoscaling リージョン一覧{% endblock %}
+
+{% block content %}
+<div class=grids>
+<div class=grid-12>
+  <h2>リージョン一覧</h2>
+  <table>
+    <tr>
+      <th>リージョン名</th>
+      <th>エンドポイント</th>
+    </tr>
+    {% for region in region_list %}
+    <tr>
+      <td><a href=/ec2/autoscale/region/{{ region.name }}>{{ region.name }}</a></td>
+      <td>{{ region.endpoint }}</td>
+    </td>
+    {% endfor %}
+  </table>
+</div>
+</div>
+{% endblock %}

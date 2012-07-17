@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from flask import Flask, render_template
 import boto
 app = Flask(__name__)
@@ -5,15 +6,23 @@ app = Flask(__name__)
 
 @app.route("/")
 def index():
+    '''
+    http://localhost/
+    show main menu
+    '''
     return render_template('index.html')
 
+
+''' EC2 '''
 @app.route("/ec2/region/")
 @app.route("/ec2/region/<region>")
 def ec2Region(region=None):
     import boto.ec2
     if region == None:
-        ''' http://example.com/ec2/region/ '''
-        con = boto.ec2.regions()
+        '''
+        http://localhost/ec2/region/
+        get all available regions ec2
+        '''
         region_list = [{
             'name': region.name,
             'endpoint':region.endpoint
@@ -23,7 +32,7 @@ def ec2Region(region=None):
                 region_list=region_list)
 
     else:
-        ''' http://example.com/ec2/region/<region> '''
+        ''' http://localhost/ec2/region/<region> '''
         con = boto.ec2.connect_to_region(region)
         instance_list = []
         for r in con.get_all_instances():
@@ -48,11 +57,38 @@ def ec2Instance(instance_id=None):
     '''  '''
 
 
+''' Autoscaling '''
+@app.route("/ec2/autoscale/")
+@app.route("/ec2/autoscale/<region>")
+def asRegion(region=None):
+    import boto.ec2.autoscale
+    if region == None:
+        '''
+        http://localhost/ec2/autoscale 
+        get all available regions for autoscaling
+        '''
+        region_list = [{
+            'name': region.name,
+            'endopoint':region.endpoint
+            } for region in boto.ec2.autoscale.regions()]
+
+        return render_template('as/RegionIndex.html',
+                region_list=region_list)
+    else:
+        con = boto.ec2.autoscale.connect_to_region(region)
+        con.get_all_groups()
+        return render_template('as/RegionView.html')
+
+''' RDS '''
 @app.route("/rds/region/")
 @app.route("/rds/region/<region>")
 def rdsRegion(region=None):
     import boto.rds
     if region == None:
+        '''
+        http://localhost/rds/region/
+        get all available regions for rds
+        '''
         con = boto.rds.regions()
         region_list =[{
             'name': region.name,
@@ -102,7 +138,7 @@ def VirtualPrivateCloud(region=None):
 def Route53(zone_id=None):
     con = boto.connect_route53()
     if zone_id != None:
-        ''' http://example.com/r53/<zone_id>
+        ''' http://localhost/r53/<zone_id>
         get all rrset specified zone id '''
         rl = con.get_all_rrsets(zone_id)
         rr = [{
@@ -115,7 +151,7 @@ def Route53(zone_id=None):
         return render_template('r53/ZoneView.html', zone_id=zone_id,rr=rr)
 
     else:
-        ''' http://example.com/r53/ 
+        ''' http://localhost/r53/ 
         get all hosted zone '''
         hl = con.get_all_hosted_zones()
         hzl = [{
@@ -124,7 +160,8 @@ def Route53(zone_id=None):
             'count': hz['ResourceRecordSetCount']
             } for hz in hl['ListHostedZonesResponse']['HostedZones']]
 
-        return render_template('r53/ZoneIndex.html', hzl=hzl)
+        return render_template('r53/ZoneIndex.html',
+                hzl=hzl)
 
 ''' IAM '''
 @app.route("/iam/group/")
@@ -132,7 +169,7 @@ def Route53(zone_id=None):
 def IamGroup(group_name=None):
     con = boto.connect_iam()
     if group_name == None:
-        ''' http://example.com/iam/group '''
+        ''' http://localhost/iam/group '''
         gr = con.get_all_groups()
         gl = [{
             'id': g.group_id,
@@ -141,10 +178,11 @@ def IamGroup(group_name=None):
             'created': g.create_date
             } for g in gr['list_groups_response']['list_groups_result']['groups']]
 
-        return render_template('iam/GroupView.html', gl=gl)
+        return render_template('iam/GroupView.html',
+                gl=gl)
 
     elif group_name != None:
-        ''' http://example.com/iam/group/<group_name> '''
+        ''' http://localhost/iam/group/<group_name> '''
         gr = con.get_group(group_name)
         group = gr['get_group_response']['get_group_result']['group']
         gd = {'id':group.group_id,
@@ -160,7 +198,8 @@ def IamGroup(group_name=None):
             'created':u.create_date
             } for u in ul]
 
-        return render_template('iam/GroupIndex.html', gd=gd,users=users)
+        return render_template('iam/GroupIndex.html',
+                gd=gd, users=users)
 
 @app.route('/iam/user/')
 @app.route("/iam/user/<user_name>")
@@ -168,7 +207,7 @@ def IamUser(user_name=None):
     con = boto.connect_iam()
 
     if user_name == None:
-        ''' http://example.com/iam/user 
+        ''' http://localhost/iam/user 
         get all IAM user '''
         ul = con.get_all_users()
         users = ul['list_users_response']['list_users_result']['users']
@@ -179,10 +218,11 @@ def IamUser(user_name=None):
                 'created': user.create_date
                 } for user in users ]
 
-        return render_template('iam/UserIndex.html', user_list=user_list)
+        return render_template('iam/UserIndex.html',
+                user_list=user_list)
 
     elif user_name != None:
-        ''' http://example.com/iam/user/<user_name> '''
+        ''' http://localhost/iam/user/<user_name> '''
 
         ''' get specified user detail '''
         ud = con.get_user(user_name)

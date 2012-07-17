@@ -35,7 +35,7 @@
     </tr>
     {% for group in group_list %}
     <tr>
-      <td>{{ group['id'] }}</td>
+      <td><a href=/iam/group/{{ group['name'] }}>{{ group['id'] }}</a></td>
       <td>{{ group['name'] }}</td>
       <td>{{ group['created'] }}</td>
     </tr>

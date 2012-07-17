@@ -179,7 +179,7 @@ def IamGroup(group_name=None):
             'created': g.create_date
             } for g in gr['list_groups_response']['list_groups_result']['groups']]
 
-        return render_template('iam/GroupView.html',
+        return render_template('iam/GroupIndex.html',
                 gl=gl)
 
     elif group_name != None:
@@ -199,7 +199,7 @@ def IamGroup(group_name=None):
             'created':u.create_date
             } for u in ul]
 
-        return render_template('iam/GroupIndex.html',
+        return render_template('iam/GroupView.html',
                 gd=gd, users=users)
 
 @app.route('/iam/user/')

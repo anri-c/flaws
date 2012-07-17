@@ -1,12 +1,9 @@
 {% extends "layout.html" %}
 
-{% if region %}
-  {% block title %}{{ region }}{% endblock %}
-{% endif %}
+{% block title %}グループ一覧{% endblock %}
 
 {% block content %}
 <div class=grid-12>
-  {% if not gl != None %}
   <h2>グループ一覧</h2>
       <table>
         <tr>
@@ -17,41 +14,12 @@
         </tr>
         {% for group in gl %}
         <tr>
-          <td>{{ group.id }}</td>
+          <td><a href=/iam/group/{{ group.name }}>{{ group.id }}</a></td>
           <td>{{ group.name }}</td>
           <td>{{ group.arn }}</td>
           <td>{{ group.created }}</td>
         </tr>
         {% endfor %}
       </table>
-    {% endif %}
-    {% if not gd == None %}
-    <h3>グループ : {{ gd['id'] }}</h3>
-    <dl>
-      <dt>グループ名<dt>
-      <dd>{{ gd['name'] }}</dd>
-      <dt>リソース名</dt>
-      <dd>{{ gd['arn']}}</dd>
-      <dt>作成日時</dt>
-      <dd>{{ gd['created'] }}</dd>
-    </dl>
-    <table>
-      <caption>所属ユーザ</caption>
-      <tr>
-        <th>ユーザ ID</th>
-        <th>ユーザ名</th>
-        <th>リソース名</th>
-        <th>作成日時</th>
-      </tr>
-      {% for user in users %}
-      <tr>
-        <td>{{ user.id }}</td>
-        <td>{{ user.name }}</td>
-        <td>{{ user.arn }}</td>
-        <td>{{ user.created }}</td>
-      </tr>
-      {% endfor %}
-      </table>
-      {% endif %}
 </div>
 {% endblock %}

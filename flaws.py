@@ -89,7 +89,6 @@ def rdsRegion(region=None):
         http://localhost/rds/region/
         get all available regions for rds
         '''
-        con = boto.rds.regions()
         region_list =[{
             'name': region.name,
             'endpoint':region.endpoint
@@ -110,10 +109,6 @@ def rdsRegion(region=None):
         return render_template('rds/RegionView.html',
                 region=region, instance_list=instance_list)
 
-
-
-
-
 ''' VPC '''
 @app.route("/vpc/")
 @app.route("/vpc/region/<region>")
@@ -128,6 +123,30 @@ def VirtualPrivateCloud(region=None):
 
 
     return 
+
+
+''' SNS '''
+@app.route("/sns/region/")
+@app.route("/sns/region/<region>")
+def snsRegion(region=None):
+    import boto.sns
+    if region == None:
+        region_list =[{
+            'name': region.name,
+            'endpoint': region.endpoint
+            } for region in boto.sns.regions()]
+
+        return render_template('sns/RegionIndex.html',
+                region_list=region_list)
+
+    else:
+        con = boto.sns.connect_to_region(region)
+        tr = con.get_all_topics()
+        topics = tr['ListTopicsResponse']['ListTopicsResult']['Topics']
+        con.get_all_subscriptions()
+
+        return render_template('sns/RegionView.html',
+                sbl=sbl, tpl=tpl)
 
 
 '''  No Region Start '''
@@ -150,7 +169,6 @@ def Route53(zone_id=None):
 
         return render_template('r53/ZoneView.html',
                 zone_id=zone_id, rr=rr)
-
     else:
         ''' http://localhost/r53/ 
         get all hosted zone '''
